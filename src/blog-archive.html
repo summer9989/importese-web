@@ -10,21 +10,9 @@
 <!-- Mobile Specific Metas
     ================================================== -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- Main structure css file -->
-<link href="style.css" rel="stylesheet">
 </head>
 <body>
-	<!-- BEGAIN PRELOADER -->
-	<div id="preloader">
-		<div id="status">&nbsp;</div>
-	</div>
-	<!-- END PRELOADER -->
-
-	<!-- SCROLL TOP BUTTON -->
-	<a class="scrollToTop" href="#"><i class="fa fa-heartbeat"></i></a>
-	<!-- END SCROLL TOP BUTTON -->
-	<div w3-include-html="header.html"></div>
+	<!--#include virtual="header.html" -->
 
 	<!--=========== START BLOG SECTION ================-->
 	<section id="blogArchive">
@@ -59,12 +47,11 @@
 									<div class="col-md-12 col-sm-12">
 
 										<div class="blog-content" id="blog-content">
-											<footera></footera>
 											<!-- Start Single Blog -->
 											<div class="single-Blog" v-for="blog in blogs">
 												<div class="single-blog-left">
 													<ul class="blog-comments-box">
-														<li>{{getMonth(blog.create_date)}}
+														<li>{{getMonth(blog.create_date) | englishMonth}}
 															<h2>{{getDay(blog.create_date)}}</h2>{{getYear(blog.create_date)}}
 														</li>
 														<li><span class="fa fa-eye"></span>{{blog.pageview}}</li>
@@ -73,7 +60,7 @@
 												<div class="single-blog-right">
 													<div class="blog-img">
 														<figure class="blog-figure">
-															<a href="#"><img alt="img" :src="blog.cover_url"></a>
+															<a href="#"><img alt="img" :src="getBlogCoverSrc(blog.id)"></a>
 															<span class="image-effect"></span>
 														</figure>
 													</div>
@@ -81,7 +68,7 @@
 														<h2>{{blog.title}}</h2>
 														<p>{{blog.description}}</p>
 														<!-- Read more btn -->
-														<a class="wpcf7-submit button--itzel" :href="blog.id"> <i class="button__icon fa fa-link"></i> <span>Read More</span>
+														<a class="wpcf7-submit button--itzel" :href="getBlogContentSrc(blog.id)"> <i class="button__icon fa fa-link"></i> <span>Read More</span>
 														</a>
 													</div>
 												</div>
@@ -97,31 +84,37 @@
 		</div>
 	</section>
 	<!--=========== END BLOG SECTION ================-->
-	<div w3-include-html="footer.html"></div>
 
-	<!-- jQuery Library  -->
-	<script src="http://lib.sinaapp.com/js/jquery/1.10.2/jquery-1.10.2.min.js"></script>
-	<!-- Bootstrap default js -->
-	<script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<!-- slick slider -->
-	<script src="js/slick.min.js"></script>
-	<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
-	<!-- counter -->
-	<script src="js/waypoints.min.js"></script>
-	<script src="js/jquery.counterup.min.js"></script>
-	<!-- Doctors hover effect -->
-	<script src="js/snap.svg-min.js"></script>
-	<script src="js/hovers.js"></script>
-	<!-- Photo Swipe Gallery Slider -->
-	<script src='js/photoswipe.min.js'></script>
-	<script src='js/photoswipe-ui-default.min.js'></script>
-	<script src="js/photoswipe-gallery.js"></script>
-	<!-- html include -->
-	<script src="https://www.w3schools.com/lib/w3data.js"></script>
-	<!-- Custom JS -->
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-	<script src="js/custom.js"></script>
-	<script src="js/blog-archive.js"></script>
-
+	<!--#include virtual="footer.html" -->
+	<!-- Custom JS -->
+	<script type="text/javascript">
+		var blog_content = new Vue({
+			el : "#blog-content",
+			data : {
+				blogs : blogs
+			},
+			methods : {
+				getBlogCoverSrc : function(id) {
+					return 'images/custom/blog_' + id + '.jpg';
+				},
+				getBlogContentSrc : function(id) {
+					return 'blog-single.html?id=' + id;
+				},
+				getYear : function(date) {
+					var date = new Date(date);
+					return date.getFullYear();
+				},
+				getMonth : function(date) {
+					var date = new Date(date);
+					return date.getMonth() + 1;
+				},
+				getDay : function(date) {
+					var date = new Date(date);
+					return date.getDate();
+				}
+			}
+		});
+	</script>
 </body>
 </html>
